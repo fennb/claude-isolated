@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Silently copy /host-pwd to /workspace
+# Silently copy /origin-repository to /workspace
 echo "Cloning git repo into new/isolated branch $BRANCH_NAME..."
-rsync -a /host-pwd/ /workspace/ 
+rsync -a /origin-repository/ /workspace/ 
 
 cd /workspace
 
@@ -29,11 +29,11 @@ if [ -n "$BRANCH_NAME" ]; then
   if [ -z "$ORIGINAL_COMMIT_HASH" ]; then
     # No original commit, so any commit is new
     echo "Repository was empty at branch creation. Pushing any new commits to host git checkout under $BRANCH_NAME..."
-    git remote add hostrepo /host-pwd 2>/dev/null || true
+    git remote add hostrepo /origin-repository 2>/dev/null || true
     git push hostrepo "$BRANCH_NAME"
   elif [ "$CURRENT_COMMIT_HASH" != "$ORIGINAL_COMMIT_HASH" ]; then
     echo "New commits detected on $BRANCH_NAME. Pushing to host git checkout under $BRANCH_NAME..."
-    git remote add hostrepo /host-pwd 2>/dev/null || true
+    git remote add hostrepo /origin-repository 2>/dev/null || true
     git push hostrepo "$BRANCH_NAME"
   else
     echo "No new commits to push; original git checkout is untouched."

@@ -14,6 +14,7 @@ RUN apt update && apt install -y less \
   man-db \
   unzip \
   gnupg2 \
+  ripgrep \
   gh \
   aggregate \
   jq
