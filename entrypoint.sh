@@ -20,9 +20,10 @@ else
   exit 1
 fi
 
-exec "$@"
+"$@"
+exit_code=$?
 
-# After the exec: only push if there are new commits on $BRANCH_NAME compared to the original commit
+# After the command exits: only push if there are new commits on $BRANCH_NAME compared to the original commit
 if [ -n "$BRANCH_NAME" ]; then
   CURRENT_COMMIT_HASH=$(git rev-parse "$BRANCH_NAME")
   if [ -z "$ORIGINAL_COMMIT_HASH" ]; then
@@ -38,3 +39,5 @@ if [ -n "$BRANCH_NAME" ]; then
     echo "No new commits to push; original git checkout is untouched."
   fi
 fi
+
+exit $exit_code
