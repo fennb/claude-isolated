@@ -6,7 +6,6 @@ ENV TZ="$TZ"
 # Install basic development tools and iptables/ipset
 RUN apt update && apt install -y less \
   git \
-  zsh \
   procps \
   rsync \
   sudo \
@@ -17,7 +16,9 @@ RUN apt update && apt install -y less \
   ripgrep \
   gh \
   aggregate \
-  jq
+  jq \
+  vim \
+  nano
 
 # Ensure default node user has access to /usr/local/share
 RUN mkdir -p /usr/local/share/npm-global && \
@@ -55,17 +56,6 @@ ENV SHELL=/bin/zsh
 # Install Claude
 RUN npm install -g @anthropic-ai/claude-code
 
-# Default powerline10k theme
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.0/zsh-in-docker.sh)" -- \
-  -p git \
-  -p fzf \
-  -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
-  -a "source /usr/share/doc/fzf/examples/completion.zsh" \
-  -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-  -a "typeset -g POWERLEVEL9K_MODE='compatible'" \
-  -a "typeset -g POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR='›'" \
-  -a "typeset -g POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR='‹'" \
-  -x
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
